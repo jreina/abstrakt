@@ -1,32 +1,23 @@
-import React from "react";import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import logo from "./logo.svg";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import { RefList } from "./components/RefList";
+import { RefList } from "./components/NewActivity/RefList";
+import { NewActivity } from "./components/NewActivity/NewActivity";
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <RefList />
-        <Switch>
-          <Route path="/about">
-            <div>
-              About
-            </div>
-          </Route>
-          <Route path="/">
-            <div>
-              Home
-            </div>
-          </Route>
-        </Switch>
+    <div className="container-xl">
+      <div className="row">
+        <div className="col-md-12">Chart</div>
       </div>
-    </Router>
+      <div className="row">
+        <div className="col-md-4">In Progress</div>
+        <div className="col-md-4">Recent</div>
+        <div className="col-md-4">
+          <NewActivity />
+        </div>
+      </div>
+    </div>
   );
 }
 
