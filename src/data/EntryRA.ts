@@ -13,6 +13,13 @@ class EntryRA {
       .then<Array<ActivityEntry>>(x => x.json())
       .then(map(formatDates));
   }
+
+  
+  unfinished(): Promise<Array<ActivityEntry>> {
+    return fetch(`/api/entries/unfinished`)
+      .then<Array<ActivityEntry>>(x => x.json())
+      .then(map(formatDates));
+  }
 }
 
 export default new EntryRA();

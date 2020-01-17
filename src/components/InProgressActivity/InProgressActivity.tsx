@@ -4,17 +4,16 @@ import EntryManager from "../../managers/EntryManager";
 import * as _ from "lodash";
 import { ActivityList } from "../ActivityList/ActivityList";
 
-export const RecentActivity = () => {
+export const InProgressActivity = () => {
   const [entries, setEntries] = useState<Array<ActivityEntry>>();
   const fetchEntries = () => {
-    EntryManager.recent().then(setEntries);
+    EntryManager.unfinished().then(setEntries);
   };
 
   useEffect(fetchEntries, []);
-  return (
-    <Fragment>
-      <h5>Recent</h5>
-      <ActivityList entries={entries} />
+  return <Fragment>
+    <h5>Unfinished</h5>
+    <ActivityList entries={entries} />
     </Fragment>
-  );
+  ;
 };

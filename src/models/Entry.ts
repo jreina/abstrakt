@@ -23,4 +23,5 @@ export interface InstanceEntry {
   title: string;
   tags?: Array<string>;
   time: Moment;
+  data?:Array<string>;
 }

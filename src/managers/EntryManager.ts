@@ -16,6 +16,13 @@ class EntryManager {
   recent(): Promise<Array<TimeEntry | InstanceEntry>> {
     return EntryRA.recent();
   }
+  
+  /**
+   *
+   */
+  unfinished(): Promise<Array<TimeEntry | InstanceEntry>> {
+    return EntryRA.unfinished();
+  }
 }
 
 export default new EntryManager();
