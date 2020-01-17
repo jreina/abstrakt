@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import ReferenceManager from "../../managers/ReferenceManager";
-import { Entry } from "../../models/Entry";
+import { ReferenceEntry } from "../../models/Entry";
 
 export const RefList = () => {
-  const [refs, setRefs] = useState<Array<Entry>>();
+  const [refs, setRefs] = useState<Array<ReferenceEntry>>();
   useEffect(() => {
     ReferenceManager.list().then(setRefs);
   }, []);

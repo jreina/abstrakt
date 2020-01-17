@@ -1,8 +1,8 @@
 import ReferenceRA from "../data/ReferenceRA";
-import { Entry } from "../models/Entry";
+import { ReferenceEntry } from "../models/Entry";
 
 class ReferenceManager {
-  list(): Promise<Array<Entry>> {
+  list(): Promise<Array<ReferenceEntry>> {
     return ReferenceRA.list();
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, ChangeEvent } from "react";
-import { Entry } from "../../models/Entry";
+import { ReferenceEntry } from "../../models/Entry";
 import ReferenceManager from "../../managers/ReferenceManager";
 import EntryManager from "../../managers/EntryManager";
 
@@ -13,8 +13,8 @@ const TagList = (tags?: Array<string>) =>
     : null;
 
 export const NewActivity = () => {
-  const [refs, setRefs] = useState<Array<Entry>>();
-  const [selectedRef, setSelectedRef] = useState<Entry>();
+  const [refs, setRefs] = useState<Array<ReferenceEntry>>();
+  const [selectedRef, setSelectedRef] = useState<ReferenceEntry>();
   const fetchRefs = () => {
     ReferenceManager.list().then(setRefs);
   };
