@@ -11,6 +11,22 @@ class EntryManager {
   }
 
   /**
+   * End an entry
+   * @param id
+   */
+  end(id: string): Promise<void> {
+    return EntryRA.end(id);
+  }
+
+  /**
+   * Drop an entry
+   * @param id
+   */
+  drop(id: string): Promise<void> {
+    return EntryRA.drop(id);
+  }
+
+  /**
    *
    */
   recent(): Promise<Array<TimeEntry | InstanceEntry>> {

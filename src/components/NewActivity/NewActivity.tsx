@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment, ChangeEvent } from "react";
 import { ReferenceEntry } from "../../models/Entry";
 import ReferenceManager from "../../managers/ReferenceManager";
 import EntryManager from "../../managers/EntryManager";
+import { RefSearch } from "../RefSearch/RefSearch";
 
 const TagList = (tags?: Array<string>) =>
   tags
@@ -21,13 +22,6 @@ export const NewActivity = () => {
 
   useEffect(fetchRefs, []);
 
-  const handleRefChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    if (!refs) return;
-    const item = refs.find(ref => ref.id === e.target.value);
-    setSelectedRef(item);
-  };
-
   const handleStartClick = () => {
     if (!selectedRef) return;
 
@@ -37,21 +31,10 @@ export const NewActivity = () => {
   return (
     <div className="card">
       <div className="card-body">
-        {refs ? (
-          <select
-            className="custom-select"
-            size={5}
-            defaultValue="-1"
-            onChange={handleRefChange}
-          >
-            <option value="-1">Select a ref</option>
-            {refs.map(({ title, id }) => (
-              <option key={id} value={id}>
-                {title}
-              </option>
-            ))}
-          </select>
-        ) : null}
+        {refs ? 
+        <RefSearch refs={refs} onSelect={setSelectedRef} />
+        : null
+        }
         <hr />
         {selectedRef ? (
           <div>

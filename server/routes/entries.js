@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { abstrakt } = require("abstrakt");
+const { abstrakt, Database } = require("abstrakt");
 const moment = require("moment");
 const _ = require("lodash");
 
@@ -8,6 +8,16 @@ const entries = Router();
 entries.post("/start/:id", function(req, res) {
   if (!req.params.id) return res.status(404).send("MISSING_ID");
   abstrakt.start(req.params.id).then(id => res.json({ id }));
+});
+
+entries.post("/end/:id", function(req, res) {
+  if (!req.params.id) return res.status(404).send("MISSING_ID");
+  abstrakt.end(req.params.id).then(_ => res.json({ id: req.params.id }));
+});
+
+entries.post("/drop/:id", function(req, res) {
+  if (!req.params.id) return res.status(404).send("MISSING_ID");
+  abstrakt.delete(req.params.id).then(_ => res.json({ id: req.params.id }));
 });
 
 entries.get("/unfinished", function(req, res) {
@@ -33,10 +43,6 @@ entries.get("/recent", async function(req, res) {
     .value();
 
   res.json(recent);
-});
-
-entries.get("/refs", function(req, res) {
-  abstrakt.refs().then(x => res.json(x));
 });
 
 module.exports = entries;

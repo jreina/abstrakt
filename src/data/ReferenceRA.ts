@@ -1,6 +1,6 @@
 class ReferenceRA {
     list() {
-        return fetch('/api/entries/refs').then(x => x.json());
+        return fetch('/api/refs/list').then(x => x.json());
     }
 }
 

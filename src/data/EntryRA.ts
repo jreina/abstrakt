@@ -8,13 +8,25 @@ class EntryRA {
       x.json()
     );
   }
+
+  end(id: string) {
+    return fetch(`/api/entries/end/${id}`, { method: "POST" }).then(x =>
+      x.json()
+    );
+  }
+
+  drop(id: string) {
+    return fetch(`/api/entries/drop/${id}`, { method: "POST" }).then(x =>
+      x.json()
+    );
+  }
+
   recent(): Promise<Array<ActivityEntry>> {
     return fetch(`/api/entries/recent`)
       .then<Array<ActivityEntry>>(x => x.json())
       .then(map(formatDates));
   }
 
-  
   unfinished(): Promise<Array<ActivityEntry>> {
     return fetch(`/api/entries/unfinished`)
       .then<Array<ActivityEntry>>(x => x.json())
