@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, ChangeEvent } from "react";
+import React, { useState, useEffect } from "react";
 import { ReferenceEntry } from "../../models/Entry";
 import ReferenceManager from "../../managers/ReferenceManager";
 import EntryManager from "../../managers/EntryManager";
@@ -13,14 +13,12 @@ const TagList = (tags?: Array<string>) =>
       ))
     : null;
 
-export const NewActivity = () => {
-  const [refs, setRefs] = useState<Array<ReferenceEntry>>();
-  const [selectedRef, setSelectedRef] = useState<ReferenceEntry>();
-  const fetchRefs = () => {
-    ReferenceManager.list().then(setRefs);
-  };
-
-  useEffect(fetchRefs, []);
+export const NewActivity = ({
+  entries
+}: {
+  entries: Array<ReferenceEntry>;
+  update: () => void;
+}) => {
 
   const handleStartClick = () => {
     if (!selectedRef) return;
@@ -31,10 +29,7 @@ export const NewActivity = () => {
   return (
     <div className="card">
       <div className="card-body">
-        {refs ? 
-        <RefSearch refs={refs} onSelect={setSelectedRef} />
-        : null
-        }
+        {refs ? <RefSearch refs={refs} onSelect={setSelectedRef} /> : null}
         <hr />
         {selectedRef ? (
           <div>

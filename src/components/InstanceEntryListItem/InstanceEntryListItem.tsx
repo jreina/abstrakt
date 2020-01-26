@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { InstanceEntry } from "../../models/Entry";
 import { DropButton } from "../DropButton";
 import EntryManager from "../../managers/EntryManager";

@@ -1,5 +1,5 @@
 import EntryRA from "../data/EntryRA";
-import { TimeEntry, InstanceEntry } from "../models/Entry";
+import { TimeEntry, InstanceEntry, Entry } from "../models/Entry";
 
 class EntryManager {
   /**
@@ -36,7 +36,7 @@ class EntryManager {
   /**
    *
    */
-  unfinished(): Promise<Array<TimeEntry | InstanceEntry>> {
+  unfinished(): Promise<Array<TimeEntry>> {
     return EntryRA.unfinished();
   }
 }

@@ -1,4 +1,4 @@
-import React, { Fragment, ChangeEvent, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { ReferenceEntry } from "../../models/Entry";
 import EntryManager from "../../managers/EntryManager";
 
@@ -29,6 +29,7 @@ export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
           id="search"
           placeholder="search for a ref"
           onKeyUp={handleInputChange}
+          autoComplete="off"
         />
       </div>
       {filtered ? (

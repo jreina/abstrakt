@@ -1,6 +1,5 @@
 import React from "react";
 import { ActivityEntry } from "../../models/Entry";
-import * as _ from "lodash";
 import Loader from "react-loader-spinner";
 import { TimeEntryListItem } from "../TimeEntryListItem/TimeEntryListItem";
 import { InstanceEntryListItem } from "../InstanceEntryListItem/InstanceEntryListItem";
@@ -23,7 +22,8 @@ export const ActivityList = ({
           }
           else if ("time" in entry) {
             return <InstanceEntryListItem entry={entry} key={k} />;
-          }
+          } 
+          return null;
         })
       )}
     </ul>

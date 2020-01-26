@@ -1,5 +1,5 @@
-import { TimeEntry, InstanceEntry, ActivityEntry } from "../models/Entry";
-import { formatDates } from "../util/formatDates";
+import { ActivityEntry, TimeEntry } from "../models/Entry";
+import { formatDates, formatTimeEntry } from "../util/formatDates";
 import { map } from "lodash/fp";
 
 class EntryRA {
@@ -27,10 +27,10 @@ class EntryRA {
       .then(map(formatDates));
   }
 
-  unfinished(): Promise<Array<ActivityEntry>> {
+  unfinished(): Promise<Array<TimeEntry>> {
     return fetch(`/api/entries/unfinished`)
-      .then<Array<ActivityEntry>>(x => x.json())
-      .then(map(formatDates));
+      .then<Array<TimeEntry>>(x => x.json())
+      .then(map(formatTimeEntry));
   }
 }
 
