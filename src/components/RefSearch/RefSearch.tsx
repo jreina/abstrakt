@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { ReferenceEntry } from "../../models/Entry";
-import EntryManager from "../../managers/EntryManager";
 
 type RefSearchProps = {
   refs: Array<ReferenceEntry>;
@@ -16,6 +15,13 @@ export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
     const term = event.target.value;
     const results = term === "" ? [] : refs.filter(x => x.title.includes(term));
     setFiltered(results);
+  };
+
+  const handleClick = (entry: ReferenceEntry) => (
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ) => {
+    setFiltered([]);
+    onSelect(entry);
   };
   return (
     <Fragment>
@@ -33,19 +39,14 @@ export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
         />
       </div>
       {filtered ? (
-        <ul className="list-group">
-          {filtered.map(({ title, id, tags }) => (
-            <li className="list-group-item list-group-item-action" key={id}>
-              <h5 className="mb-1">{title}</h5>
-              <div className="mb-1">
-                <small>
-                  <span className="link" onClick={() => EntryManager.start(id)}>start</span> |{" "}
-                  <span>instance</span> | <span>edit</span>
-                </small>
-              </div>
-              <small className="text-muted">
-                {tags ? <em>{tags.join(", ")}</em> : null}
-              </small>
+        <ul className="list-group list-group-flush">
+          {filtered.map((entry) => (
+            <li
+              className="list-group-item link"
+              key={entry.id}
+              onClick={handleClick(entry)}
+            >
+              {entry.title}
             </li>
           ))}
         </ul>

@@ -1,15 +1,27 @@
 import React from "react";
 import { TimeEntry } from "../../models/Entry";
 import moment from "moment";
-import EntryManager from "../../managers/EntryManager";
 import { DropButton } from "../DropButton";
+import { EntryConsumer } from "../../contexts/EntryContext";
+import firebaseApp from "../../backend/firebase";
 
-const finishEntry = (id: string) => () => EntryManager.end(id);
+const finishEntry = (user: any, id: string) => () => {
+  firebaseApp
+    .firestore()
+    .collection(`users/${user.uid}/timeEntries`)
+    .doc(id)
+    .update(
+      "end",
+      moment()
+        .utc()
+        .toISOString()
+    );
+};
 
-const time = (entry: TimeEntry) => {
+const time = (entry: TimeEntry, user: any) => {
   const badges = [
     <span key="1">
-      <em>{entry.start.format("HH:mm")}</em>
+      <em>{moment(entry.start).format("HH:mm")}</em>
     </span>
   ];
 
@@ -19,7 +31,7 @@ const time = (entry: TimeEntry) => {
       <span key="2">
         <em>
           {" "}
-          - {entry?.end?.format("HH:mm")} ({duration} minutes)
+          - {moment(entry?.end).format("HH:mm")} ({duration} minutes)
         </em>
       </span>
     );
@@ -30,7 +42,7 @@ const time = (entry: TimeEntry) => {
         <em>
           {" "}
           - now ({duration} minutes){" "}
-          <span className="link" onClick={finishEntry(entry.id)}>
+          <span className="link" onClick={finishEntry(user, entry.id)}>
             finish
           </span>
         </em>
@@ -41,13 +53,24 @@ const time = (entry: TimeEntry) => {
   return badges;
 };
 
+const dropForUser = (user: any, id: any) => () => {
+  return firebaseApp
+    .firestore()
+    .collection(`users/${user.uid}/timeEntries`)
+    .doc(id)
+    .delete();
+};
+
 export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
+  console.log(entry);
   return (
     <li className="list-group-item list-group-item-action" key={entry.id}>
       <div className="d-flex w-100 justify-content-between">
         <p className="mb-1">{entry.title}</p>
         <small>
-          <DropButton dropAction={() => EntryManager.drop(entry.id)} />
+          <EntryConsumer>
+            {s => <DropButton dropAction={dropForUser(s.user, entry.id)} />}
+          </EntryConsumer>
         </small>
       </div>
       <div className="d-flex w-100 justify-content-between">
@@ -56,8 +79,9 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
             <em>{entry.tags.join(", ")}</em>
           </small>
         ) : null}
-
-        <small>{time(entry)}</small>
+        <EntryConsumer>
+        {s => <small>{time(entry, s.user)}</small>}
+        </EntryConsumer>
       </div>
     </li>
   );

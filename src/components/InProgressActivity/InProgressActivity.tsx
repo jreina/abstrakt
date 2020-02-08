@@ -1,6 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import { ActivityEntry } from "../../models/Entry";
-import EntryManager from "../../managers/EntryManager";
 import { ActivityList } from "../ActivityList/ActivityList";
 
 export const InProgressActivity = ({

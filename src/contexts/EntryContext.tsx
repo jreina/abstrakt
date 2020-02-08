@@ -1,10 +1,9 @@
-import React, { useState, ReactNode } from "react";
-import { Entry } from "../models/Entry";
+import React from "react";
 
 interface AppState {
-  entries: Array<Entry>;
+  user: any;
 }
-const EntryContext = React.createContext<Array<Entry>>([]);
+const EntryContext = React.createContext<AppState>({ user: undefined});
 
 export const EntryProvider = EntryContext.Provider;
 export const EntryConsumer = EntryContext.Consumer;
