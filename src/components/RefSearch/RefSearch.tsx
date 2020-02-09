@@ -15,6 +15,11 @@ export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
     const term = event.target.value;
     const results = term === "" ? [] : refs.filter(x => x.title.includes(term));
     setFiltered(results);
+    if (event.key === "Enter")
+      onSelect({
+        title: term,
+        tags: []
+      });
   };
 
   const handleClick = (entry: ReferenceEntry) => (
@@ -40,7 +45,7 @@ export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
       </div>
       {filtered ? (
         <ul className="list-group list-group-flush">
-          {filtered.map((entry) => (
+          {filtered.map(entry => (
             <li
               className="list-group-item link"
               key={entry.id}

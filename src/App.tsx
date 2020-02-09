@@ -45,13 +45,10 @@ function App({ user, signOut, signInWithGoogle }: any) {
           </div>
           <div className="row">
             <div className="col-md-4">
-              <InProgressActivity entries={state.unfinished} />
+              <NewActivity entries={state.references} user={user} />
             </div>
             <div className="col-md-4">
               <RecentActivity user={user} />
-            </div>
-            <div className="col-md-4">
-              <NewActivity entries={state.references} user={user} />
             </div>
           </div>
         </EntryProvider>
