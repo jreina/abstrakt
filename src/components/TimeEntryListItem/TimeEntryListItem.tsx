@@ -21,7 +21,7 @@ const finishEntry = (user: any, id: string) => () => {
 const time = (entry: TimeEntry, user: any) => {
   const badges = [
     <span key="1">
-      <em>{moment(entry.start).format("HH:mm")}</em>
+      <em>{moment(entry.start).format("MM/DD HH:mm")}</em>
     </span>
   ];
 
