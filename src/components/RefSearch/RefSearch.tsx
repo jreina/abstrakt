@@ -11,7 +11,7 @@ export const RefSearch = ({ onSelect }: RefSearchProps) => {
   const { user } = useAppState();
   const ref = firebaseApp
     .firestore()
-    .collection(`users/${user.uid}/references`);
+    .collection(`users/${(user as firebase.User).uid}/references`);
 
   // @ts-ignore
   const { data: refs } = useFirestoreDoc<ReferenceEntry>(ref);

@@ -62,7 +62,6 @@ const dropForUser = (user: any, id: any) => () => {
 };
 
 export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
-  console.log(entry);
   return (
     <li className="list-group-item list-group-item-action" key={entry.id}>
       <div className="d-flex w-100 justify-content-between">
