@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { NewActivity } from "./components/NewActivity/NewActivity";
 import { RecentActivity } from "./components/RecentActivity/RecentActivity";
-import { InProgressActivity } from "./components/InProgressActivity/InProgressActivity";
 import { TimeEntry, ActivityEntry, ReferenceEntry } from "./models/Entry";
 import firebaseApp, { providers, firebaseAppAuth } from "./backend/firebase";
 import withFirebaseAuth from "react-with-firebase-auth";
-import { EntryProvider } from "./contexts/EntryContext";
+import { AppStateContext } from "./contexts/AppStateContext";
+import { useAuth } from "./hooks/useauth";
+import Loader from "react-loader-spinner";
+import { Intro } from "./components/Intro/Intro";
 
 type AppState = {
   recent: Array<ActivityEntry>;
@@ -14,51 +16,36 @@ type AppState = {
   references: Array<ReferenceEntry>;
 };
 
-function App({ user, signOut, signInWithGoogle }: any) {
-  const [state, setState] = useState<AppState>({
-    recent: [],
-    references: [],
-    unfinished: []
-  });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const db = firebaseApp.firestore();
-      const data = await db.collection("references").get();
-      // @ts-ignore
-      const refs = data.docs.map(x => x.data());
-
-      // @ts-ignore
-      setState(x => ({ ...x, references: refs }));
-    };
-    fetchData();
-  }, [user]);
+function App({ signOut, signInWithGoogle }: any) {
+  const { initializing, user } = useAuth();
 
   return (
     <div className="container-xl">
-      {user ? (
-        <EntryProvider value={{ user }}>
+      {!initializing && !user ? <Intro signIn={signInWithGoogle}/> : null}
+      {!initializing && user ? (
+        <AppStateContext.Provider value={{ user }}>
           <div className="row">
             <div className="col-md-12">
-              <p>Hello, {user.displayName}</p>
+              <p>
+                Hello, {user.displayName} [
+                <span className="link" onClick={signOut}>
+                  sign out
+                </span>
+                ]
+              </p>
             </div>
           </div>
           <div className="row">
             <div className="col-md-4">
-              <NewActivity entries={state.references} user={user} />
+              <NewActivity />
             </div>
             <div className="col-md-4">
-              <RecentActivity user={user} />
+              <RecentActivity />
             </div>
           </div>
-        </EntryProvider>
+        </AppStateContext.Provider>
       ) : (
-        <p>Please sign in.</p>
-      )}
-      {user ? (
-        <button onClick={signOut}>Sign out</button>
-      ) : (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
+        null
       )}
     </div>
   );

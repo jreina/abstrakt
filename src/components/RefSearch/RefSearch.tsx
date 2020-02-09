@@ -1,13 +1,14 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { ReferenceEntry } from "../../models/Entry";
 import firebaseApp from "../../backend/firebase";
 import { useFirestoreDoc } from "../../hooks/useFirestoreDoc";
+import { useAppState } from "../../hooks/useAppState";
 
 type RefSearchProps = {
   onSelect: (ref: ReferenceEntry) => void;
-  user: any;
 };
-export const RefSearch = ({ onSelect, user }: RefSearchProps) => {
+export const RefSearch = ({ onSelect }: RefSearchProps) => {
+  const { user } = useAppState();
   const ref = firebaseApp
     .firestore()
     .collection(`users/${user.uid}/references`);
@@ -15,7 +16,7 @@ export const RefSearch = ({ onSelect, user }: RefSearchProps) => {
   // @ts-ignore
   const { data: refs } = useFirestoreDoc<ReferenceEntry>(ref);
   const [filtered, setFiltered] = useState<Array<ReferenceEntry>>([]);
-  
+
   const clearInput = () => setFiltered([]);
 
   const handleInputChange = (
@@ -30,7 +31,12 @@ export const RefSearch = ({ onSelect, user }: RefSearchProps) => {
             (x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) =>
               x.get("title").includes(term)
           );
-    setFiltered(results.map((x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) => x.data()));
+    setFiltered(
+      results.map(
+        (x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) =>
+          x.data()
+      )
+    );
     if (event.key === "Enter") {
       onSelect({
         title: term,

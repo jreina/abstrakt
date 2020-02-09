@@ -4,6 +4,7 @@ import { RefSearch } from "../RefSearch/RefSearch";
 import firebaseApp from "../../backend/firebase";
 import moment from "moment";
 import * as R from "ramda";
+import { useAppState } from "../../hooks/useAppState";
 
 const tagLens = R.lensProp("tags");
 
@@ -22,16 +23,11 @@ const TagList = (
       ))
     : null;
 
-export const NewActivity = ({
-  entries,
-  user
-}: {
-  entries: Array<ReferenceEntry>;
-  user: any;
-}) => {
+export const NewActivity = () => {
   const [selectedRef, setSelectedRef] = useState<ReferenceEntry>();
+  const { user } = useAppState();
   const handleStartClick = () => {
-    if (!selectedRef) return;
+    if (!selectedRef || !user) return;
     firebaseApp
       .firestore()
       .collection(`users/${user.uid}/timeEntries`)
@@ -43,7 +39,7 @@ export const NewActivity = ({
         tags: selectedRef.tags
       });
 
-      // Add reference if no ID exists on the ref
+    // Add reference if no ID exists on the ref
     if (!selectedRef.id) {
       firebaseApp
         .firestore()
@@ -64,44 +60,44 @@ export const NewActivity = ({
   const dropTag = (tag: string) =>
     setSelectedRef(R.over(tagLens, R.filter(R.pipe(R.equals(tag), R.not))));
 
-  return <>
-    <h5>Start something new</h5>
-    <div className="card">
-      <div className="card-body">
-        {entries ? (
-          // @ts-ignore
-          <RefSearch refs={entries} onSelect={setSelectedRef} user={user} />
-        ) : null}
-        <hr />
-        {selectedRef ? (
-          <div>
-            <h5 className="card-title">{selectedRef.title}</h5>
-            <div>{TagList(selectedRef.tags, dropTag)}</div>
-            <div className="form-group">
-              <label htmlFor="add-tag" className="sr-only">
-                add a tag
-              </label>
-              <input
-                type="search"
-                className="form-control"
-                id="add-tag"
-                placeholder="add a tag..."
-                autoComplete="off"
-                onKeyUp={handleInputChange}
-              />
+  return (
+    <>
+      <h5>Start something new</h5>
+      <div className="card">
+        <div className="card-body">
+          <RefSearch onSelect={setSelectedRef} />
+
+          <hr />
+          {selectedRef ? (
+            <div>
+              <h5 className="card-title">{selectedRef.title}</h5>
+              <div>{TagList(selectedRef.tags, dropTag)}</div>
+              <div className="form-group">
+                <label htmlFor="add-tag" className="sr-only">
+                  add a tag
+                </label>
+                <input
+                  type="search"
+                  className="form-control"
+                  id="add-tag"
+                  placeholder="add a tag..."
+                  autoComplete="off"
+                  onKeyUp={handleInputChange}
+                />
+              </div>
+              <button
+                className="btn btn-outline-success btn-block btn-sm"
+                onClick={handleStartClick}
+              >
+                Start
+              </button>
+              <button className="btn btn-outline-success btn-block btn-sm">
+                Instance
+              </button>
             </div>
-            <button
-              className="btn btn-outline-success btn-block btn-sm"
-              onClick={handleStartClick}
-            >
-              Start
-            </button>
-            <button className="btn btn-outline-success btn-block btn-sm">
-              Instance
-            </button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
-    </div>
-  </>
+    </>
+  );
 };
