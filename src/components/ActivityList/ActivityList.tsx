@@ -7,11 +7,11 @@ import { InstanceEntryListItem } from "../InstanceEntryListItem/InstanceEntryLis
 export const ActivityList = ({
   entries
 }: {
-  entries?: Array<ActivityEntry>;
+  entries: Array<ActivityEntry> | null;
 }) => {
   return (
     <ul className="list-group">
-      {entries === undefined ? (
+      {entries === null ? (
         <span className="d-flex justify-content-center">
           <Loader type="MutatingDots" />
         </span>

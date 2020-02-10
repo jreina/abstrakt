@@ -42,7 +42,7 @@ const time = (entry: TimeEntry, user: firebase.User) => {
       <span key="3">
         <em>
           {" "}(<Timeago date={entry.start.toString()} />){" "}
-          <span className="link" onClick={finishEntry(user, entry.id)}>
+          <span className="link pointer" onClick={finishEntry(user, entry.id)}>
             finish
           </span>
         </em>

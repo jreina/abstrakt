@@ -24,9 +24,10 @@ const TagList = (
     : null;
 
 export const NewActivity = () => {
+  const [currentTag, setCurrentTag] = useState<string>("");
   const [selectedRef, setSelectedRef] = useState<ReferenceEntry>();
   const { user } = useAppState();
-  const handleStartClick = () => {
+  const handleStartClick = async () => {
     if (!selectedRef || !user) return;
     firebaseApp
       .firestore()
@@ -46,19 +47,21 @@ export const NewActivity = () => {
         .collection(`users/${user.uid}/references`)
         .add(selectedRef);
     }
+    setSelectedRef(undefined);
   };
-  const handleInputChange = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ): void => {
-    if (event.key === "Enter") {
-      //@ts-ignore
-      const term = event.target.value;
-      setSelectedRef(R.over(tagLens, R.concat([term])));
-    }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setCurrentTag(event.target.value);
   };
 
   const dropTag = (tag: string) =>
     setSelectedRef(R.over(tagLens, R.filter(R.pipe(R.equals(tag), R.not))));
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && currentTag !== "") {
+      setSelectedRef(R.over(tagLens, R.concat([currentTag])));
+      setCurrentTag('');
+    }
+  };
 
   return (
     <>
@@ -82,7 +85,9 @@ export const NewActivity = () => {
                   id="add-tag"
                   placeholder="add a tag..."
                   autoComplete="off"
-                  onKeyUp={handleInputChange}
+                  onChange={handleChange}
+                  value={currentTag}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
               <button

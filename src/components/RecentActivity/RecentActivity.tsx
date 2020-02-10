@@ -20,12 +20,7 @@ export const RecentActivity = () => {
     <Fragment>
       <h5>Recent</h5>
       <ActivityList
-        entries={entries?.docs.map(
-          (x: firebase.firestore.QueryDocumentSnapshot<ActivityEntry>) => ({
-            id: x.id,
-            ...x.data()
-          })
-        )}
+        entries={entries}
       />
     </Fragment>
   );

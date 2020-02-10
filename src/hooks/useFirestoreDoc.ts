@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 
 type FirestoreDocState<T> = {
   isLoading: boolean;
-  data: firebase.firestore.QuerySnapshot<T> | null;
+  data: Array<T> | null;
 };
 
-export const useFirestoreDoc = <T>(
+type Indexed = { id?: string; }
+
+export const useFirestoreDoc = <T extends Indexed>(
   ref: firebase.firestore.CollectionReference<T>
 ) => {
   const [docState, setDocState] = useState<FirestoreDocState<T>>({
@@ -17,7 +19,7 @@ export const useFirestoreDoc = <T>(
     ref.onSnapshot(doc => {
       setDocState({
         isLoading: false,
-        data: doc
+        data: doc.docs.map((x: firebase.firestore.QueryDocumentSnapshot<T>) => ({ ...x.data(), id: x.id }))
       });
     });
   }, []);
