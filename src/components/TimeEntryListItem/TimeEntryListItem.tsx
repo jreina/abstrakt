@@ -5,6 +5,7 @@ import { DropButton } from "../DropButton";
 import firebaseApp from "../../backend/firebase";
 import { useAppState } from "../../hooks/useAppState";
 import { User } from "firebase";
+import Timeago from 'react-timeago';
 
 const finishEntry = (user: User, id: string) => () => {
   firebaseApp
@@ -37,12 +38,10 @@ const time = (entry: TimeEntry, user: firebase.User) => {
       </span>
     );
   } else {
-    const duration = moment().diff(moment(entry.start), "minutes");
     badges.push(
       <span key="3">
         <em>
-          {" "}
-          - now ({duration} minutes){" "}
+          {" "}(<Timeago date={entry.start.toString()} />){" "}
           <span className="link" onClick={finishEntry(user, entry.id)}>
             finish
           </span>

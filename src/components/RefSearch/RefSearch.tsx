@@ -33,8 +33,10 @@ export const RefSearch = ({ onSelect }: RefSearchProps) => {
           );
     setFiltered(
       results.map(
-        (x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) =>
-          x.data()
+        (x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) => ({
+          ...x.data(),
+          id: x.id
+        })
       )
     );
     if (event.key === "Enter") {
