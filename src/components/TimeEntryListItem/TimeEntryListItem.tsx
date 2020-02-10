@@ -2,10 +2,11 @@ import React from "react";
 import { TimeEntry } from "../../models/Entry";
 import moment from "moment";
 import { DropButton } from "../DropButton";
-import { EntryConsumer } from "../../contexts/EntryContext";
 import firebaseApp from "../../backend/firebase";
+import { useAppState } from "../../hooks/useAppState";
+import { User } from "firebase";
 
-const finishEntry = (user: any, id: string) => () => {
+const finishEntry = (user: User, id: string) => () => {
   firebaseApp
     .firestore()
     .collection(`users/${user.uid}/timeEntries`)
@@ -18,7 +19,7 @@ const finishEntry = (user: any, id: string) => () => {
     );
 };
 
-const time = (entry: TimeEntry, user: any) => {
+const time = (entry: TimeEntry, user: firebase.User) => {
   const badges = [
     <span key="1">
       <em>{moment(entry.start).format("MM/DD HH:mm")}</em>
@@ -62,14 +63,13 @@ const dropForUser = (user: any, id: any) => () => {
 };
 
 export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
+  const { user } = useAppState();
   return (
     <li className="list-group-item list-group-item-action" key={entry.id}>
       <div className="d-flex w-100 justify-content-between">
         <p className="mb-1">{entry.title}</p>
         <small>
-          <EntryConsumer>
-            {s => <DropButton dropAction={dropForUser(s.user, entry.id)} />}
-          </EntryConsumer>
+          <DropButton dropAction={dropForUser(user, entry.id)} />
         </small>
       </div>
       <div className="d-flex w-100 justify-content-between">
@@ -78,9 +78,7 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
             <em>{entry.tags.join(", ")}</em>
           </small>
         ) : null}
-        <EntryConsumer>
-        {s => <small>{time(entry, s.user)}</small>}
-        </EntryConsumer>
+        <small>{time(entry, (user as User))}</small>
       </div>
     </li>
   );
