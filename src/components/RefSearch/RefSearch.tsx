@@ -1,22 +1,59 @@
-import React, { Fragment, ChangeEvent, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { ReferenceEntry } from "../../models/Entry";
-import EntryManager from "../../managers/EntryManager";
+import firebaseApp from "../../backend/firebase";
+import { useFirestoreDoc } from "../../hooks/useFirestoreDoc";
+import { useAppState } from "../../hooks/useAppState";
 
 type RefSearchProps = {
-  refs: Array<ReferenceEntry>;
   onSelect: (ref: ReferenceEntry) => void;
 };
-export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
+export const RefSearch = ({ onSelect }: RefSearchProps) => {
+  const { user } = useAppState();
+  const ref = firebaseApp
+    .firestore()
+    .collection(`users/${(user as firebase.User).uid}/references`);
+
+  // @ts-ignore
+  const { data: refs } = useFirestoreDoc<ReferenceEntry>(ref);
   const [filtered, setFiltered] = useState<Array<ReferenceEntry>>([]);
+
+  const clearInput = () => setFiltered([]);
 
   const handleInputChange = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
     //@ts-ignore
     const term = event.target.value;
-    const results = term === "" ? [] : refs.filter(x => x.title.includes(term));
-    setFiltered(results);
+    const results =
+      term === ""
+        ? []
+        : refs.docs.filter(
+            (x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) =>
+              x.get("title").includes(term)
+          );
+    setFiltered(
+      results.map(
+        (x: firebase.firestore.QueryDocumentSnapshot<ReferenceEntry>) =>
+          x.data()
+      )
+    );
+    if (event.key === "Enter") {
+      onSelect({
+        title: term,
+        tags: []
+      });
+      clearInput();
+    }
   };
+
+  const handleClick = (entry: ReferenceEntry) => (
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ) => {
+    setFiltered([]);
+    onSelect(entry);
+    clearInput();
+  };
+
   return (
     <Fragment>
       <div className="form-group">
@@ -29,22 +66,18 @@ export const RefSearch = ({ refs, onSelect }: RefSearchProps) => {
           id="search"
           placeholder="search for a ref"
           onKeyUp={handleInputChange}
+          autoComplete="off"
         />
       </div>
       {filtered ? (
-        <ul className="list-group">
-          {filtered.map(({ title, id, tags }) => (
-            <li className="list-group-item list-group-item-action" key={id}>
-              <h5 className="mb-1">{title}</h5>
-              <div className="mb-1">
-                <small>
-                  <span className="link" onClick={() => EntryManager.start(id)}>start</span> |{" "}
-                  <span>instance</span> | <span>edit</span>
-                </small>
-              </div>
-              <small className="text-muted">
-                {tags ? <em>{tags.join(", ")}</em> : null}
-              </small>
+        <ul className="list-group list-group-flush">
+          {filtered.map(entry => (
+            <li
+              className="list-group-item link"
+              key={entry.id}
+              onClick={handleClick(entry)}
+            >
+              {entry.title}
             </li>
           ))}
         </ul>

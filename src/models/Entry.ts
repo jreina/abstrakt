@@ -5,7 +5,7 @@ export type Entry = ReferenceEntry | TimeEntry | InstanceEntry;
 export type ActivityEntry = TimeEntry | InstanceEntry;
 
 export interface ReferenceEntry {
-  id: string;
+  id?: string;
   title: string;
   tags?: Array<string>;
 }

@@ -1,20 +1,32 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import { ActivityEntry } from "../../models/Entry";
-import EntryManager from "../../managers/EntryManager";
-import * as _ from "lodash";
 import { ActivityList } from "../ActivityList/ActivityList";
+import firebaseApp from "../../backend/firebase";
+import { useFirestoreDoc } from "../../hooks/useFirestoreDoc";
+import { useAppState } from "../../hooks/useAppState";
 
 export const RecentActivity = () => {
-  const [entries, setEntries] = useState<Array<ActivityEntry>>();
-  const fetchEntries = () => {
-    EntryManager.recent().then(setEntries);
-  };
+  const {user} = useAppState();
+  const ref = firebaseApp
+    .firestore()
+    .collection(`users/${(user as firebase.User).uid}/timeEntries`)
+    .orderBy("start", "desc")
+    .limit(10);
 
-  useEffect(fetchEntries, []);
+  // @ts-ignore
+  const { data: entries } = useFirestoreDoc<ActivityEntry>(ref);
+
   return (
     <Fragment>
       <h5>Recent</h5>
-      <ActivityList entries={entries} />
+      <ActivityList
+        entries={entries?.docs.map(
+          (x: firebase.firestore.QueryDocumentSnapshot<ActivityEntry>) => ({
+            id: x.id,
+            ...x.data()
+          })
+        )}
+      />
     </Fragment>
   );
 };

@@ -1,12 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
-import ReferenceManager from "../../managers/ReferenceManager";
+import React, { useState, Fragment } from "react";
 import { ReferenceEntry } from "../../models/Entry";
 
 export const RefList = () => {
   const [refs, setRefs] = useState<Array<ReferenceEntry>>();
-  useEffect(() => {
-    ReferenceManager.list().then(setRefs);
-  }, []);
+
 
   return refs ? (
     <select>

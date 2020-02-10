@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { InstanceEntry } from "../../models/Entry";
 import { DropButton } from "../DropButton";
-import EntryManager from "../../managers/EntryManager";
 
 export const InstanceEntryListItem = ({ entry }: { entry: InstanceEntry }) => {
   return (
@@ -9,7 +8,7 @@ export const InstanceEntryListItem = ({ entry }: { entry: InstanceEntry }) => {
       <div className="d-flex w-100 justify-content-between">
         <p className="mb-1">{entry.title}</p>
         <small>
-          <DropButton dropAction={() => EntryManager.drop(entry.id)} />
+          <DropButton dropAction={async () => {}} />
         </small>
       </div>
       <div className="d-flex w-100 justify-content-between">
