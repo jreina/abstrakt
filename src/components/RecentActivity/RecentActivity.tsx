@@ -10,8 +10,7 @@ export const RecentActivity = () => {
   const ref = firebaseApp
     .firestore()
     .collection(`users/${(user as firebase.User).uid}/timeEntries`)
-    .orderBy("start", "desc")
-    .limit(5);
+    .orderBy("start", "desc");
 
   // @ts-ignore
   const { data: entries } = useFirestoreDoc<ActivityEntry>(ref);

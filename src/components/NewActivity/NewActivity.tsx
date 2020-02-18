@@ -69,8 +69,6 @@ export const NewActivity = () => {
       <div className="card">
         <div className="card-body">
           <RefSearch onSelect={setSelectedRef} />
-
-          <hr />
           {selectedRef ? (
             <div>
               <h5 className="card-title">{selectedRef.title}</h5>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState } from "react";
 import { ReferenceEntry } from "../../models/Entry";
 import firebaseApp from "../../backend/firebase";
 import { useFirestoreDoc } from "../../hooks/useFirestoreDoc";
@@ -62,7 +62,7 @@ export const RefSearch = ({ onSelect }: RefSearchProps) => {
     <Fragment>
       <div className="form-group">
         <label htmlFor="search" className="sr-only">
-          search for a ref
+          search for an activity
         </label>
         <input
           type="search"
@@ -74,6 +74,7 @@ export const RefSearch = ({ onSelect }: RefSearchProps) => {
           onKeyDown={handleKeyDown}
           autoComplete="off"
         />
+        <em>press enter to create a new activity</em>
       </div>
       {filtered ? (
         <ul className="list-group list-group-flush">

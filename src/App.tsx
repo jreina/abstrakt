@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { NewActivity } from "./components/NewActivity/NewActivity";
 import { RecentActivity } from "./components/RecentActivity/RecentActivity";
 import { TimeEntry, ActivityEntry, ReferenceEntry } from "./models/Entry";
-import firebaseApp, { providers, firebaseAppAuth } from "./backend/firebase";
+import { providers, firebaseAppAuth } from "./backend/firebase";
 import withFirebaseAuth from "react-with-firebase-auth";
 import { AppStateContext } from "./contexts/AppStateContext";
 import { useAuth } from "./hooks/useauth";
-import Loader from "react-loader-spinner";
 import { Intro } from "./components/Intro/Intro";
+import { Navigation } from "./components/Navigation/Navigation";
 
 type AppState = {
   recent: Array<ActivityEntry>;
@@ -19,7 +19,8 @@ type AppState = {
 function App({ signOut, signInWithGoogle }: any) {
   const { initializing, user } = useAuth();
 
-  return (
+  return <>
+    <Navigation />
     <div className="container-xl">
       {!initializing && !user ? <Intro signIn={signInWithGoogle}/> : null}
       {!initializing && user ? (
@@ -48,7 +49,7 @@ function App({ signOut, signInWithGoogle }: any) {
         null
       )}
     </div>
-  );
+  </>
 }
 
 export default withFirebaseAuth({
