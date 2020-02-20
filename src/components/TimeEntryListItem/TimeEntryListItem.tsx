@@ -7,8 +7,12 @@ import { useAppState } from "../../hooks/useAppState";
 import { User } from "firebase";
 import Timeago from "react-timeago";
 import DateTimePicker from "react-datetime-picker";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee, faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCoffee,
+  faPencilAlt,
+  faTrashAlt
+} from "@fortawesome/free-solid-svg-icons";
 
 const finishEntry = (user: User, id: string) => () => {
   firebaseApp
@@ -40,8 +44,15 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
         <p className="mb-1">{entry.title}</p>
         <p>
           <DropButton dropAction={dropForUser(user, entry.id)} />
-          <button className="btn btn-outline-dark btn-sm"><FontAwesomeIcon icon={faTrashAlt} /></button>
-          <button className="btn btn-outline-dark btn-sm"><FontAwesomeIcon icon={faPencilAlt} /></button>
+          <button className="btn btn-outline-dark btn-sm">
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </button>
+          <button
+            className="btn btn-outline-dark btn-sm"
+            onClick={() => setIsEditing(val => !val)}
+          >
+            <FontAwesomeIcon icon={faPencilAlt} />
+          </button>
         </p>
       </div>
       <div className="d-flex w-100 justify-content-between">
@@ -63,14 +74,22 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
           </span>
           {"end" in entry ? (
             <span>
-              <em>
-                {" "}
-                - {moment(entry?.end).format("HH:mm")} (
-                {moment(entry.end).diff(moment(entry.start), "minutes")}{" "}
-                minutes)
-              </em>
+              {isEditing ? (
+                <DateTimePicker
+                  value={moment(entry.end).toDate()}
+                  disableClock="true"
+                />
+              ) : (
+                <em>
+                  {" "}
+                  - {moment(entry?.end).format("HH:mm")} (
+                  {moment(entry.end).diff(moment(entry.start), "minutes")}{" "}
+                  minutes)
+                </em>
+              )}
             </span>
-          ) : (
+          ) : null}
+          {isEditing ? null : (
             <span>
               <em>
                 {" "}
