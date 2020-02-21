@@ -45,6 +45,7 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
           <button
             className="btn btn-outline-dark btn-sm"
             onClick={() => setIsEditing(val => !val)}
+            disabled
           >
             <FontAwesomeIcon icon={faPencilAlt} />
           </button>
