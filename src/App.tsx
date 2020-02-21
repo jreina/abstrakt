@@ -20,27 +20,16 @@ function App({ signOut, signInWithGoogle }: any) {
   const { initializing, user } = useAuth();
 
   return <>
-    <Navigation />
+    <Navigation signOut={signOut} />
     <div className="container-xl">
       {!initializing && !user ? <Intro signIn={signInWithGoogle}/> : null}
       {!initializing && user ? (
         <AppStateContext.Provider value={{ user }}>
           <div className="row">
-            <div className="col-md-12">
-              <p>
-                Hello, {user.displayName} [
-                <span className="link" onClick={signOut}>
-                  sign out
-                </span>
-                ]
-              </p>
+            <div className="col-md-3">
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-6">
               <NewActivity />
-            </div>
-            <div className="col-md-4">
               <RecentActivity />
             </div>
           </div>

@@ -9,9 +9,7 @@ import Timeago from "react-timeago";
 import DateTimePicker from "react-datetime-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCoffee,
-  faPencilAlt,
-  faTrashAlt
+  faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
 
 const finishEntry = (user: User, id: string) => () => {
@@ -44,9 +42,6 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
         <p className="mb-1">{entry.title}</p>
         <p>
           <DropButton dropAction={dropForUser(user, entry.id)} />
-          <button className="btn btn-outline-dark btn-sm">
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </button>
           <button
             className="btn btn-outline-dark btn-sm"
             onClick={() => setIsEditing(val => !val)}
@@ -88,8 +83,7 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
                 </em>
               )}
             </span>
-          ) : null}
-          {isEditing ? null : (
+          ) : isEditing ? null : (
             <span>
               <em>
                 {" "}
