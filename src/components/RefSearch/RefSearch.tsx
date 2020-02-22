@@ -29,7 +29,7 @@ export const RefSearch = ({ onSelect }: RefSearchProps) => {
   };
 
   const handleClick = (entry: ReferenceEntry) => (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     onSelect(entry);
     clearInput();
@@ -83,15 +83,15 @@ export const RefSearch = ({ onSelect }: RefSearchProps) => {
               <div className="d-flex w-100 justify-content-between">
                 <h5 className="mb-1">{entry.title}</h5>
                 <span>
-                  <small className="link pointer" onClick={handleClick(entry)}>
-                    [start]
-                  </small>{" "}
-                  <small
-                    className="link pointer"
+                  <button className="btn btn-outline-primary btn-sm" onClick={handleClick(entry)}>
+                    Use this
+                  </button>{" "}
+                  <button
+                    className="btn btn-outline-danger btn-sm"
                     onClick={handleDropRefClick(entry.id)}
                   >
-                    [drop]
-                  </small>
+                    Delete activity
+                  </button>
                 </span>
               </div>
             </li>

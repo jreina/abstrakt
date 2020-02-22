@@ -14,11 +14,12 @@ const TagList = (
 ) =>
   tags
     ? tags.map((tag, idx) => (
-        <span key={idx} className="badge badge-dark badge-pill">
-          {tag}{" "}
-          <span className="link" onClick={() => removeFn(tag)}>
-            x
-          </span>
+        <span
+          key={idx}
+          className="badge badge-dark pointer mr-1"
+          onClick={() => removeFn(tag)}
+        >
+          <span>{tag}</span>
         </span>
       ))
     : null;
@@ -59,20 +60,22 @@ export const NewActivity = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && currentTag !== "") {
       setSelectedRef(R.over(tagLens, R.concat([currentTag])));
-      setCurrentTag('');
+      setCurrentTag("");
     }
+  };
+
+  const cancelStaged = () => {
+    setSelectedRef(undefined);
   };
 
   return (
     <>
-      <h5>Start something new</h5>
       <div className="card">
         <div className="card-body">
-          <RefSearch onSelect={setSelectedRef} />
           {selectedRef ? (
             <div>
               <h5 className="card-title">{selectedRef.title}</h5>
-              <div>{TagList(selectedRef.tags, dropTag)}</div>
+              <div className="mb-1">{TagList(selectedRef.tags, dropTag)}</div>
               <div className="form-group">
                 <label htmlFor="add-tag" className="sr-only">
                   add a tag
@@ -81,24 +84,33 @@ export const NewActivity = () => {
                   type="search"
                   className="form-control"
                   id="add-tag"
-                  placeholder="add a tag..."
+                  placeholder="press enter to add..."
                   autoComplete="off"
                   onChange={handleChange}
                   value={currentTag}
                   onKeyDown={handleKeyDown}
                 />
+                <em>click or tap a tag to remove it</em>
               </div>
               <button
-                className="btn btn-outline-success btn-block btn-sm"
+                className="btn btn-outline-success btn-sm mr-1"
                 onClick={handleStartClick}
               >
                 Start
               </button>
-              <button className="btn btn-outline-success btn-block btn-sm">
-                Instance
+              <button
+                className="btn btn-outline-warning btn-sm"
+                onClick={cancelStaged}
+              >
+                Cancel
               </button>
             </div>
-          ) : null}
+          ) : (
+            <>
+              <h5 className="card-title">Start something new</h5>
+              <RefSearch onSelect={setSelectedRef} />
+            </>
+          )}
         </div>
       </div>
     </>
