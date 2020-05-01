@@ -8,9 +8,8 @@ import { User } from "firebase";
 import Timeago from "react-timeago";
 import DateTimePicker from "react-datetime-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPencilAlt
-} from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const finishEntry = (user: User, id: string) => () => {
   firebaseApp
@@ -42,6 +41,12 @@ export const TimeEntryListItem = ({ entry }: { entry: TimeEntry }) => {
         <p className="mb-1">{entry.title}</p>
         <p>
           <DropButton dropAction={dropForUser(user, entry.id)} />
+          <Link
+            to={`/edit/${entry.id}`}
+            className="btn btn-outline-dark btn-sm"
+          >
+            <FontAwesomeIcon icon={faPencilAlt} />
+          </Link>
           <button
             className="btn btn-outline-dark btn-sm"
             onClick={() => setIsEditing(val => !val)}
